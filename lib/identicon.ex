@@ -29,7 +29,16 @@ defmodule Identicon do
 
   def build_grid(%Identicon.Image{hex: hex} = image) do
     hex
-    |> Enum.chunk_every(3)
+    |> Enum.chunk_every(3, 3, :discard)
+    |> Enum.map(&mirror_row/1)
+  end
+
+  def mirror_row(row) do
+    # [145, 46, 200]
+    [first, second | _tail ] = row
+
+    #[145, 46, 200, 46, 145]
+    row ++ [second, first]
   end
 
   def hash_input(input) do
